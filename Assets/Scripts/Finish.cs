@@ -4,14 +4,11 @@ public class Finish : MonoBehaviour
 {
     public GameObject victoryScreen;
 
-    void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("Ball"))
+        if (collision.gameObject.CompareTag("Ball"))
         {
-            if (victoryScreen != null)
-            {
-                victoryScreen.SetActive(true);
-            }
+            victoryScreen.SetActive(true);
         }
     }
 }

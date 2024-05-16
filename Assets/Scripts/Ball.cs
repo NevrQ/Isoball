@@ -6,6 +6,7 @@ public class Ball : MonoBehaviour
     public float decelerationRate = 0.1f;
 
     private Rigidbody rb;
+    private bool isMoving = true;
 
     void Start()
     {
@@ -16,8 +17,26 @@ public class Ball : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 decelerationForce = -rb.velocity.normalized * decelerationRate;
+        if (isMoving)
+        {
+            Vector3 decelerationForce = -rb.velocity.normalized * decelerationRate;
 
-        rb.AddForce(decelerationForce, ForceMode.Acceleration);
+            rb.AddForce(decelerationForce, ForceMode.Acceleration);
+        }
+    }
+
+    public void StopMoving()
+    {
+        rb.velocity = Vector3.zero;
+        isMoving = false;
+    }
+
+    public void SetMoveDirection(Vector3 direction)
+    {
+        if (!isMoving)
+        {
+            isMoving = true;
+            rb.velocity = direction.normalized * initialMoveSpeed;
+        }
     }
 }

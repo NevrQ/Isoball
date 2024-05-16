@@ -1,38 +1,46 @@
 using UnityEngine;
 
-public class BlockPlacement : MonoBehaviour
+public class Place : MonoBehaviour
 {
     public GameObject[] blockPrefabs;
-    public LayerMask placementLayer;
-
-    private int selectedBlockIndex = -1;
+    private int currentBlockIndex = 0;
+    public Ball ballController;
+    public LayerMask blockLayer;
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (selectedBlockIndex != -1)
+            currentBlockIndex = (currentBlockIndex + 1) % blockPrefabs.Length;
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, blockLayer))
             {
-                PlaceBlock();
+                if (hit.collider.CompareTag("Delete"))
+                {
+                    Destroy(hit.collider.gameObject);
+                }
             }
         }
-    }
 
-    void PlaceBlock()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, placementLayer))
+        if (Input.GetMouseButtonDown(0))
         {
-            Vector3 placementPosition = hit.point;
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            Instantiate(blockPrefabs[selectedBlockIndex], placementPosition, Quaternion.identity);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, blockLayer))
+            {
+                Vector3 newBlockPosition = hit.collider.gameObject.transform.position + Vector3.up;
+
+                Instantiate(blockPrefabs[currentBlockIndex], newBlockPosition, Quaternion.identity);
+
+                ballController.StopMoving();
+            }
         }
-    }
-
-    public void SelectBlock(int blockIndex)
-    {
-        selectedBlockIndex = blockIndex;
     }
 }
