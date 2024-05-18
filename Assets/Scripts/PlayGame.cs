@@ -3,12 +3,23 @@ using UnityEngine.UI;
 
 public class PlayGame : MonoBehaviour
 {
-    public GameObject startButton;
-    private bool gameStarted = false;
+    public Button resumeButton;
+    public Ball ballController;
 
-    public void StartGame()
+    void Start()
     {
-        startButton.SetActive(false);
-        gameStarted = true;
+        Time.timeScale = 0f;
+
+        if (resumeButton != null)
+        {
+            resumeButton.onClick.AddListener(ResumeGame);
+        }
+    }
+
+    void ResumeGame()
+    {
+        Time.timeScale = 1f;
+        ballController.StartMoving();
+        resumeButton.gameObject.SetActive(false);
     }
 }
