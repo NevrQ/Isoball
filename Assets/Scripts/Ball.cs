@@ -1,18 +1,19 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Ball : MonoBehaviour
 {
     public float initialMoveSpeed = 5f;
     public float boostedSpeed = 10f;
     public float decelerationRate = 0.1f;
-
     private Rigidbody rb;
     private bool isMoving = false;
+    private float startTime;
+    private float restartDelay = 5f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        StartMoving();
     }
 
     void FixedUpdate()
@@ -22,6 +23,8 @@ public class Ball : MonoBehaviour
             Vector3 decelerationForce = -rb.velocity.normalized * decelerationRate;
             rb.AddForce(decelerationForce, ForceMode.Acceleration);
         }
+
+        CheckSpeed();
     }
 
     public void StartMoving()
@@ -44,12 +47,34 @@ public class Ball : MonoBehaviour
         }
     }
 
+    public void ResetStartTime()
+    {
+        startTime = Time.time;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Boost"))
+        if (collision.collider.CompareTag("Boost"))
         {
-            initialMoveSpeed = boostedSpeed;
-            SetMoveDirection(rb.velocity.normalized);
+            Boost();
         }
+    }
+
+    private void Boost()
+    {
+        rb.velocity = rb.velocity.normalized * boostedSpeed;
+    }
+
+    private void CheckSpeed()
+    {
+        if (Time.time >= startTime + restartDelay && rb.velocity.magnitude < 0.1f)
+        {
+            RestartGame();
+        }
+    }
+
+    private void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

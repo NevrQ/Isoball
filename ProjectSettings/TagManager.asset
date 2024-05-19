@@ -8,6 +8,7 @@ TagManager:
   - Ramp
   - Delete
   - Boost
+  - Death
   layers:
   - Default
   - TransparentFX

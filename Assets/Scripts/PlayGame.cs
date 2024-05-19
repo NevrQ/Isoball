@@ -20,6 +20,7 @@ public class PlayGame : MonoBehaviour
     {
         Time.timeScale = 1f;
         ballController.StartMoving();
+        ballController.ResetStartTime();
         resumeButton.gameObject.SetActive(false);
     }
 }

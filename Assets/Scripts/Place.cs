@@ -20,8 +20,12 @@ public class Place : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            currentBlockIndex = (currentBlockIndex + 1) % blockPrefabs.Length;
-            UpdatePreview();
+            CycleBlock();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RotateBlock();
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -70,6 +74,20 @@ public class Place : MonoBehaviour
             Destroy(currentPreview);
         }
         currentPreview = Instantiate(previewPrefabs[currentBlockIndex]);
+    }
+
+    void CycleBlock()
+    {
+        currentBlockIndex = (currentBlockIndex + 1) % blockPrefabs.Length;
+        UpdatePreview();
+    }
+
+    void RotateBlock()
+    {
+        if (currentPreview != null)
+        {
+            currentPreview.transform.Rotate(Vector3.up, 90f);
+        }
     }
 
     Vector3 SnapToGrid(Vector3 originalPosition)
