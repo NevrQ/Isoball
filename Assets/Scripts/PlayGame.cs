@@ -23,4 +23,9 @@ public class PlayGame : MonoBehaviour
         ballController.ResetStartTime();
         resumeButton.gameObject.SetActive(false);
     }
+
+    public void RestartGame()
+    {
+        GameManager.instance.RestartGame();
+    }
 }
